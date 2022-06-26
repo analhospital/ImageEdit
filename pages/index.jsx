@@ -1,6 +1,6 @@
-// import { Temp } from "../components/temp";
 import dynamic from "next/dynamic";
 
+//SSRでエラーになるのを回避している
 let Temp = dynamic(() => import("../components/temp"), {
   ssr: false,
 });

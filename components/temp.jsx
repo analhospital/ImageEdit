@@ -344,7 +344,8 @@ const Temp = () => {
 
         <Flex
           as="header"
-          width="500px"
+          minWidth="500px"
+          width="full"
           borderBottom={1}
           borderStyle={"solid"}
           align={"center"}
