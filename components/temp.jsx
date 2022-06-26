@@ -22,6 +22,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 const Temp = () => {
   const inputRef = useRef(null);
+  const userImg = useRef();
 
   const [mainImage, setMainImage] = useState("");
 
@@ -326,7 +327,8 @@ const Temp = () => {
         quality: 0,
         pixelRatio: 2,
       });
-      console.log(dataURL);
+
+      userImg.current.setAttribute("src", dataURL);
     }
   };
 
@@ -419,7 +421,7 @@ const Temp = () => {
                 onChange={titleChange2}
               />
               <Button colorScheme="blue" onClick={handleSaveImage}>
-                反映する
+                保存する
               </Button>
             </Stack>
             <Stack height={550}>
@@ -431,7 +433,12 @@ const Temp = () => {
                 />
                 <Stage ref={stageRef} width={width} height={height}>
                   <Layer>
-                    <Image image={image} width={width} height={height} />
+                    <Image
+                      image={image}
+                      ref={userImg}
+                      width={width}
+                      height={height}
+                    />
                     <Group x={15} y={25}>
                       <WipeComment />
                     </Group>
