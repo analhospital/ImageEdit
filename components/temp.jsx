@@ -2,10 +2,11 @@ import React, { useState, useRef } from "react";
 import { Layer, Rect, Stage, Text, Image, Group, Circle } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
-
+import { Text as CText } from "@chakra-ui/react";
 import Head from "next/head";
 
-import { CText } from "./CText";
+//ChakraUIとkonvaでTextがダブったので
+// import { CText } from "./CText";
 
 import {
   Box,
@@ -15,15 +16,9 @@ import {
   Spacer,
   Container,
   Button,
+  Link,
 } from "@chakra-ui/react";
 import { ChakraProvider } from "@chakra-ui/react";
-
-import dynamic from "next/dynamic";
-
-// import cardPic from "../public/card.png";
-import iconPic from "../public/icon.png";
-import fukidashiPic from "../public/fukidashi.png";
-import bangumiPic from "../public/bangumi.png";
 
 const Temp = () => {
   const inputRef = useRef(null);
@@ -81,7 +76,7 @@ const Temp = () => {
 
   function NeonText() {
     const fontsize = 35;
-    const fontfamily = "YuMincho";
+    const fontfamily = "'YuMincho', 'Yu Mincho', 'serif'";
     const fontstyle = "italic";
     const r = 180;
     const g = 0;
@@ -95,14 +90,17 @@ const Temp = () => {
     }).textWidth;
     const strokecolor = `rgba(${r}, ${g}, ${b}, 0.2)`;
     const fillcolor = `rgba(255, 255, 255, 1)`;
+    const scaleX = Math.min(1, (width * 0.9) / text_length);
 
     // const fontsize = 70
     return (
-      <Group x={(width - text_length) / 2} y={height - fontsize * 1.2 - 20}>
+      <Group
+        x={(width - text_length * scaleX) / 2}
+        y={height - fontsize * 1.2 - 20}
+        scaleX={scaleX}
+      >
         <Text
           text={textState}
-          x={0}
-          y={0}
           fontSize={fontsize}
           fontFamily={fontfamily}
           fontStyle={fontstyle}
@@ -115,8 +113,6 @@ const Temp = () => {
         />
         <Text
           text={textState}
-          x={0}
-          y={0}
           fontSize={fontsize}
           fontFamily={fontfamily}
           fontStyle={fontstyle}
@@ -127,8 +123,6 @@ const Temp = () => {
         />
         <Text
           text={textState}
-          x={0}
-          y={0}
           fontSize={fontsize}
           fontFamily={fontfamily}
           fontStyle={fontstyle}
@@ -139,8 +133,6 @@ const Temp = () => {
         />
         <Text
           text={textState}
-          x={0}
-          y={0}
           fontSize={fontsize}
           fontFamily={fontfamily}
           fontStyle={fontstyle}
@@ -152,8 +144,6 @@ const Temp = () => {
 
         <Text
           text={textState}
-          x={0}
-          y={0}
           fontSize={fontsize}
           fontFamily={fontfamily}
           fontStyle={fontstyle}
@@ -164,8 +154,6 @@ const Temp = () => {
         />
         <Text
           text={textState}
-          x={0}
-          y={0}
           fontSize={fontsize}
           fontFamily={fontfamily}
           fontStyle={fontstyle}
@@ -178,7 +166,7 @@ const Temp = () => {
 
   function TitleText() {
     const fontsize1 = 24;
-    const fontfamily1 = "筑紫B丸ゴシック";
+    const fontfamily1 = "KiWi Maru";
     const text_length1 = new Konva.Text({
       text: titleState1 + "    ",
       fontSize: fontsize1,
@@ -186,7 +174,7 @@ const Temp = () => {
     }).textWidth;
 
     const fontsize2 = 24;
-    const fontfamily2 = "筑紫B丸ゴシック";
+    const fontfamily2 = "KiWi Maru";
     const text_length2 = new Konva.Text({
       text: titleState2 + " ",
       fontSize: fontsize2,
@@ -194,8 +182,8 @@ const Temp = () => {
     }).textWidth;
     const text_length_sum =
       40 +
-      (titleState1 !== "") * (text_length1 - 29) +
-      (titleState2 !== "") * text_length2;
+      (titleState1 !== "" ? text_length1 - 29 : 0) +
+      (titleState2 !== "" ? text_length2 : 0);
     function TitleText1() {
       if (titleState1 === "") {
         return <Group></Group>;
@@ -211,7 +199,7 @@ const Temp = () => {
             />
             <Text
               text={titleState1}
-              x={16}
+              x={14}
               y={14}
               fontSize={fontsize1}
               fontFamily={fontfamily1}
@@ -282,7 +270,7 @@ const Temp = () => {
     }
     function WipeText() {
       const fontsize = 18;
-      const fontfamily = "筑紫B丸ゴシック";
+      const fontfamily = "Kiwi Maru";
       const text_length = new Konva.Text({
         text: commentState + "    ",
         fontSize: fontsize,
@@ -332,7 +320,6 @@ const Temp = () => {
   }
 
   const handleSaveImage = () => {
-    // event.preventDefault();
     if (stageRef.current !== undefined) {
       const dataURL = stageRef.current.toDataURL({
         mimeType: "image/jpeg",
@@ -357,7 +344,7 @@ const Temp = () => {
 
         <Flex
           as="header"
-          width="full"
+          width="500px"
           borderBottom={1}
           borderStyle={"solid"}
           align={"center"}
@@ -377,14 +364,13 @@ const Temp = () => {
           </CText>
           <Spacer />
 
-          <Button colorScheme="blue">寄付する</Button>
+          <Link href="https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&country=XX&uselang=ja&utm_medium=sidebar&utm_source=donate&utm_campaign=C13_ja.wikipedia.org">
+            <Button colorScheme="blue">寄付する</Button>
+          </Link>
         </Flex>
 
         <Container maxW="7xl" pt={{ base: "12", md: "12" }} pb={1} px={4}>
-          <Flex
-            width="full"
-            flexDirection={{ base: "column-reverse", md: "row" }}
-          >
+          <Flex flexDirection={{ base: "column-reverse", md: "row" }}>
             <Stack spacing={4}>
               <Text fontWeight="semibold">コマ画像</Text>
               <input
@@ -431,11 +417,17 @@ const Temp = () => {
                 value={titleState2}
                 onChange={titleChange2}
               />
-              <Button colorScheme="blue">反映する</Button>
+              <Button colorScheme="blue" onClick={handleSaveImage}>
+                反映する
+              </Button>
             </Stack>
-            <Stack>
+            <Stack height={550}>
               {/* 仮置きでアイドル画像をImgタグで表示しています */}
               <Box rounded={"lg"} boxSize={{ base: "320px", lg: "500px" }}>
+                <link
+                  href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap"
+                  rel="stylesheet"
+                />
                 <Stage ref={stageRef} width={width} height={height}>
                   <Layer>
                     <Image image={image} width={width} height={height} />
@@ -464,19 +456,13 @@ const Temp = () => {
           px={{ base: "4", md: "8" }}
         >
           <Text fontSize="sm">
-            &copy; {new Date().getFullYear()} Tanaka without ethics , All rights
-            reserved.
+            &copy; {new Date().getFullYear()} なんちゃらかんちゃらシステム開発 ,
+            All rights reserved.
           </Text>
         </Box>
       </ChakraProvider>
     </>
   );
-  //   }
-  //   return (
-  //     <div>
-  //       <TelopField />
-  //     </div>
-  //   );
 };
 
 export default Temp;
