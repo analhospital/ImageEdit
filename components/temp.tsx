@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Layer, Rect, Stage, Text, Image, Group, Circle } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
-import { Text as ChakraUIText } from "@chakra-ui/react";
+import { Text as ChakraUIText, useDisclosure } from "@chakra-ui/react";
 import Head from "next/head";
 
 import { Telop } from "./Telop";
@@ -18,13 +18,22 @@ import {
   Container,
   Button,
   Link,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { ChakraProvider } from "@chakra-ui/react";
 
 const Temp = () => {
-  const inputRef = useRef(null);
-  const userImg = useRef() as any;
+  const useImg = useRef(null) as any;
 
+  const [imageUrl, setImageUrl] = useState("");
+
+  //mainImageは多分不要
   const [mainImage, setMainImage] = useState("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,15 +88,25 @@ const Temp = () => {
     setCommentState(event.target.value);
   };
 
-  // const handleSaveImage = () => {
-  //   if (!stageRef.current) return;
-  //   const dataURL = stageRef.current.toDataURL({
-  //     mimeType: "image/jpeg",
-  //     quality: 0,
-  //     pixelRatio: 2,
-  //   });
-  //   userImg.current.setAttribute("src", dataURL);
-  // };
+  const handleSaveImage = () => {
+    if (!stageRef.current) return;
+    const dataURL = stageRef.current.toDataURL({
+      mimeType: "image/jpeg",
+      quality: 0,
+      pixelRatio: 2,
+    });
+    setImageUrl(dataURL);
+  };
+
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+    />
+  );
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [overlay, setOverlay] = React.useState(<OverlayOne />);
 
   return (
     <>
@@ -129,53 +148,9 @@ const Temp = () => {
           </Link>
         </Flex>
 
-        <Container maxW="7xl" pt={{ base: "12", md: "12" }} pb={1} px={4}>
-          <Flex flexDirection={{ base: "column-reverse", md: "row" }}>
-            <Stack spacing={4}>
-              <Text fontWeight="semibold">コマ画像</Text>
-              <input
-                type="file"
-                name="file"
-                id="file"
-                onChange={handleFileChange}
-                ref={inputRef}
-              />
-              <Text fontWeight="semibold">アイコン</Text>
-              <input
-                type="file"
-                name="file"
-                id="file"
-                onChange={handleIconImageChange}
-                ref={inputRef}
-              />
-              <Text fontWeight="semibold">テロップ</Text>
-              <Input
-                inputMode="text"
-                placeholder="どういうお笑い"
-                value={textState}
-                onChange={textChange}
-              />
-              <Text fontWeight="semibold">ツッコミ</Text>
-              <Input
-                inputMode="text"
-                placeholder="どういうお笑い"
-                value={commentState}
-                onChange={commentChange}
-              />
-
-              <Text fontWeight="semibold">番組名１</Text>
-              <Input
-                inputMode="text"
-                placeholder="@TwitterJP"
-                value={titleState}
-                onChange={titleChange1}
-              />
-
-              {/* <Button colorScheme="blue" onClick={handleSaveImage}>
-                保存する
-              </Button> */}
-            </Stack>
-            <Stack height={550}>
+        <Container maxW="2xl" pt={{ base: "12", md: "12" }} pb={1} px={4}>
+          <Flex flexDirection="column">
+            <Stack height={height + 50}>
               {/* 仮置きでアイドル画像をImgタグで表示しています */}
               <Box rounded={"lg"} boxSize={{ base: "320px", lg: "500px" }}>
                 <link
@@ -184,12 +159,7 @@ const Temp = () => {
                 />
                 <Stage ref={stageRef} width={width} height={height}>
                   <Layer>
-                    <Image
-                      image={image}
-                      ref={userImg}
-                      width={width}
-                      height={height}
-                    />
+                    <Image image={image} width={width} height={height} />
                     <Group x={15} y={25}>
                       <Wipe
                         image3Status={image3Status}
@@ -215,6 +185,73 @@ const Temp = () => {
               </Box>
               <canvas id="my-canvas" width="500" height="500" hidden></canvas>
               <canvas id="icon" width="500" height="500" hidden></canvas>
+            </Stack>
+            <Stack spacing={4}>
+              <ChakraUIText fontWeight="semibold">コマ画像</ChakraUIText>
+              <input
+                type="file"
+                name="file"
+                id="file"
+                onChange={handleFileChange}
+              />
+              <ChakraUIText fontWeight="semibold">アイコン</ChakraUIText>
+              <input
+                type="file"
+                name="file"
+                id="file"
+                onChange={handleIconImageChange}
+              />
+              <ChakraUIText fontWeight="semibold">テロップ</ChakraUIText>
+              <Input
+                inputMode="text"
+                placeholder="どういうお笑い"
+                value={textState}
+                onChange={textChange}
+              />
+              <ChakraUIText fontWeight="semibold">ツッコミ</ChakraUIText>
+              <Input
+                inputMode="text"
+                placeholder="どういうお笑い"
+                value={commentState}
+                onChange={commentChange}
+              />
+
+              <ChakraUIText fontWeight="semibold">番組名</ChakraUIText>
+              <Input
+                inputMode="text"
+                placeholder="@TwitterJP"
+                value={titleState}
+                onChange={titleChange1}
+              />
+
+              {/* <Button colorScheme="blue" onClick={handleSaveImage}>
+                保存する
+              </Button> */}
+
+              <Button
+                colorScheme="blue"
+                onClick={() => {
+                  handleSaveImage();
+                  setOverlay(<OverlayOne />);
+                  onOpen();
+                }}
+              >
+                保存する
+              </Button>
+
+              <Modal isCentered isOpen={isOpen} onClose={onClose}>
+                {overlay}
+                <ModalContent>
+                  <ModalHeader>画像が生成されました！</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <img src={imageUrl} />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button onClick={onClose}>Close</Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </Stack>
           </Flex>
         </Container>
