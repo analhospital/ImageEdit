@@ -53,10 +53,10 @@ const Temp = () => {
   const [image1] = useImage('/bangumi.png')
   const [image2] = useImage('/fukidashi.png')
 
-  const width = 500
-
   const size = useGetWindowSize()
   console.log('画面サイズ：', size)
+
+  const width = size.width > 500 ? 500 : size.width
 
   // {画像が読み込みおわったら正しいcanvasサイズをセット}
   const [height, setHeight] = useState(500)
@@ -64,7 +64,6 @@ const Temp = () => {
   useEffect(() => {
     if (imageStatus === 'loaded' && image != null) {
       setHeight((500 * image.height) / image.width)
-      console.log({ height })
     }
   }, [imageStatus])
 
@@ -93,7 +92,7 @@ const Temp = () => {
     const dataURL = stageRef.current.toDataURL({
       mimeType: 'image/jpeg',
       quality: 0,
-      pixelRatio: 2,
+      pixelRatio: window.devicePixelRatio,
     })
     setImageUrl(dataURL)
   }
@@ -122,7 +121,6 @@ const Temp = () => {
 
         <Flex
           as="header"
-          minWidth="500px"
           width="full"
           borderBottom={1}
           borderStyle={'solid'}
@@ -136,7 +134,7 @@ const Temp = () => {
           <ChakraUIText
             textAlign={{ base: 'center', md: 'left' }}
             fontFamily={'Nico Moji'}
-            fontSize={{ base: '4xl', md: 'left' }}
+            fontSize={{ base: '3xl', md: 'left' }}
             color={'gray.800'}
           >
             テロップつくるくん
@@ -148,7 +146,13 @@ const Temp = () => {
           </Link>
         </Flex>
 
-        <Container maxW="2xl" pt={{ base: '12', md: '12' }} pb={1} px={4}>
+        <Container
+          maxW="2xl"
+          pt={{ base: '12', md: '12' }}
+          pb={1}
+          px={4}
+          width="full"
+        >
           <Flex flexDirection="column">
             <Stack height={height + 50}>
               <Box rounded={'lg'} boxSize={{ base: '320px', lg: '500px' }}>
@@ -238,23 +242,23 @@ const Temp = () => {
               >
                 保存する
               </Button>
-
-              <Modal isCentered isOpen={isOpen} onClose={onClose}>
-                {overlay}
-                <ModalContent>
-                  <ModalHeader>画像が生成されました！</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-                    <img src={imageUrl} />
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button onClick={onClose}>Close</Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
             </Stack>
           </Flex>
         </Container>
+
+        <Modal isCentered isOpen={isOpen} onClose={onClose}>
+          {overlay}
+          <ModalContent>
+            <ModalHeader>画像が生成されました！</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <img src={imageUrl} />
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onClose}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
 
         <Box
           as="footer"
