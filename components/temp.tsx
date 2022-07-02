@@ -8,7 +8,7 @@ import { Telop } from './Telop'
 import { Title } from './Title'
 import { Wipe } from './Wipe'
 
-import { getWindowSize } from '../hooks/getWindowSize'
+import { useGetWindowSize } from '../hooks/useGetWindowSize'
 
 import {
   Box,
@@ -30,8 +30,6 @@ import {
 import { ChakraProvider } from '@chakra-ui/react'
 
 const Temp = () => {
-  const useImg = useRef(null) as any
-
   const [imageUrl, setImageUrl] = useState('')
 
   //mainImageは多分不要
@@ -57,23 +55,19 @@ const Temp = () => {
 
   const width = 500
 
-  const size = getWindowSize()
+  const size = useGetWindowSize()
   console.log('画面サイズ：', size)
 
   // {画像が読み込みおわったら正しいcanvasサイズをセット}
   const [height, setHeight] = useState(500)
-  console.log({ height })
 
   useEffect(() => {
-    if (imageStatus === 'loaded') {
-      if (image != null) {
-        setHeight((height * image.height) / image.width)
-        console.log({ height })
-      }
+    if (imageStatus === 'loaded' && image != null) {
+      setHeight((500 * image.height) / image.width)
+      console.log({ height })
     }
   }, [imageStatus])
 
-  // function TelopField() {
   const stageRef = useRef() as any
   const [textState, setTextState] = useState('なんかいい感じのテロップ')
   // const [formtext, setFormText] = useState(textState)
@@ -157,7 +151,6 @@ const Temp = () => {
         <Container maxW="2xl" pt={{ base: '12', md: '12' }} pb={1} px={4}>
           <Flex flexDirection="column">
             <Stack height={height + 50}>
-              {/* 仮置きでアイドル画像をImgタグで表示しています */}
               <Box rounded={'lg'} boxSize={{ base: '320px', lg: '500px' }}>
                 <link
                   href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap"
@@ -234,10 +227,6 @@ const Temp = () => {
                 value={titleState}
                 onChange={titleChange1}
               />
-
-              {/* <Button colorScheme="blue" onClick={handleSaveImage}>
-                保存する
-              </Button> */}
 
               <Button
                 colorScheme="blue"
