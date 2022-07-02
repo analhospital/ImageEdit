@@ -1,35 +1,35 @@
-import { Layer, Rect, Stage, Text, Image, Group, Circle } from "react-konva";
-import Konva from "konva";
+import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
+import Konva from 'konva'
 
 export const Wipe = ({ image3Status, image2, image3, commentState }) => {
-  const radius = 40;
-  const waku_ratio = 0.1;
+  const radius = 40
+  const waku_ratio = 0.1
   function RoundedImage() {
-    if (image3Status !== "loaded") {
-      return <Group></Group>;
+    if (image3Status !== 'loaded') {
+      return <Group></Group>
     } else {
       return (
         <Group
           clipFunc={(ctx) => {
-            ctx.beginPath();
-            ctx.arc(radius, radius, radius, 0, Math.PI * 2, true);
+            ctx.beginPath()
+            ctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
           }}
         >
           <Image width={radius * 2} height={radius * 2} image={image3} />
         </Group>
-      );
+      )
     }
   }
   function WipeText() {
-    const fontsize = 18;
-    const fontfamily = "Kiwi Maru";
+    const fontsize = 18
+    const fontfamily = 'Kiwi Maru'
     const text_length = new Konva.Text({
-      text: commentState + "    ",
+      text: commentState + '    ',
       fontSize: fontsize,
       fontFamily: fontfamily,
-    }).textWidth;
-    if (commentState === "") {
-      return <Group></Group>;
+    }).textWidth
+    if (commentState === '') {
+      return <Group></Group>
     } else {
       return (
         <Group x={20} y={85}>
@@ -52,7 +52,7 @@ export const Wipe = ({ image3Status, image2, image3, commentState }) => {
             fill="#000"
           />
         </Group>
-      );
+      )
     }
   }
   return (
@@ -68,5 +68,5 @@ export const Wipe = ({ image3Status, image2, image3, commentState }) => {
       <RoundedImage />
       <WipeText />
     </Group>
-  );
-};
+  )
+}

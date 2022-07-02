@@ -1,19 +1,19 @@
-import { Layer, Rect, Stage, Text, Image, Group, Circle } from "react-konva";
-import Konva from "konva";
+import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
+import Konva from 'konva'
 
 export const Title = ({ width, image1, titleState }) => {
-  if (titleState === "") {
-    return <Group></Group>;
+  if (titleState === '') {
+    return <Group></Group>
   }
-  const fontsize = 24;
-  const fontfamily = "KiWi Maru";
+  const fontsize = 24
+  const fontfamily = 'KiWi Maru'
   const text_length = new Konva.Text({
-    text: titleState + "    ",
+    text: titleState + '    ',
     fontSize: fontsize,
     fontFamily: fontfamily,
-  }).textWidth;
+  }).textWidth
 
-  const text_length_sum = 40 + (titleState !== "" ? text_length - 29 : 0);
+  const text_length_sum = 40 + (titleState !== '' ? text_length - 29 : 0)
 
   return (
     <Group x={width - text_length_sum}>
@@ -36,5 +36,5 @@ export const Title = ({ width, image1, titleState }) => {
         fill="#000"
       />
     </Group>
-  );
-};
+  )
+}
