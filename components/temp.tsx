@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
 import useImage from 'use-image'
-import Konva from 'konva'
 import { Text as ChakraUIText, useDisclosure } from '@chakra-ui/react'
 import Head from 'next/head'
 
 import { Telop } from './Telop'
 import { Title } from './Title'
 import { Wipe } from './Wipe'
+
+import { getWindowSize } from '../hooks/getWindowSize'
 
 import {
   Box,
@@ -56,13 +57,18 @@ const Temp = () => {
 
   const width = 500
 
+  const size = getWindowSize()
+  console.log('画面サイズ：', size)
+
   // {画像が読み込みおわったら正しいcanvasサイズをセット}
   const [height, setHeight] = useState(500)
+  console.log({ height })
 
   useEffect(() => {
     if (imageStatus === 'loaded') {
       if (image != null) {
         setHeight((height * image.height) / image.width)
+        console.log({ height })
       }
     }
   }, [imageStatus])
