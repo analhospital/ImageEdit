@@ -1,23 +1,23 @@
-import { Layer, Rect, Stage, Text, Image, Group, Circle } from "react-konva";
-import Konva from "konva";
+import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
+import Konva from 'konva'
 
 export const Telop = ({ width, height, textState }) => {
-  const fontsize = 35;
-  const fontfamily = "'YuMincho', 'Yu Mincho', 'serif'";
-  const fontstyle = "italic";
-  const r = 180;
-  const g = 0;
-  const b = 0;
-  const shadowcolor = `rgb(${r}, ${g}, ${b})`;
+  const fontsize = 35
+  const fontfamily = "'YuMincho', 'Yu Mincho', 'serif'"
+  const fontstyle = 'italic'
+  const r = 180
+  const g = 0
+  const b = 0
+  const shadowcolor = `rgb(${r}, ${g}, ${b})`
   const text_length = new Konva.Text({
     text: textState,
     fontSize: fontsize,
     fontFamily: fontfamily,
     fontStyle: fontstyle,
-  }).textWidth;
-  const strokecolor = `rgba(${r}, ${g}, ${b}, 0.2)`;
-  const fillcolor = `rgba(255, 255, 255, 1)`;
-  const scaleX = Math.min(1, (width * 0.9) / text_length);
+  }).textWidth
+  const strokecolor = `rgba(${r}, ${g}, ${b}, 0.2)`
+  const fillcolor = `rgba(255, 255, 255, 1)`
+  const scaleX = Math.min(1, (width * 0.9) / text_length)
 
   // const fontsize = 70
   return (
@@ -88,5 +88,5 @@ export const Telop = ({ width, height, textState }) => {
         fill={fillcolor}
       />
     </Group>
-  );
-};
+  )
+}

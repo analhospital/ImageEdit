@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Layer, Rect, Stage, Text, Image, Group, Circle } from "react-konva";
-import useImage from "use-image";
-import Konva from "konva";
-import { Text as ChakraUIText, useDisclosure } from "@chakra-ui/react";
-import Head from "next/head";
+import React, { useState, useRef, useEffect } from 'react'
+import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
+import useImage from 'use-image'
+import Konva from 'konva'
+import { Text as ChakraUIText, useDisclosure } from '@chakra-ui/react'
+import Head from 'next/head'
 
-import { Telop } from "./Telop";
-import { Title } from "./Title";
-import { Wipe } from "./Wipe";
+import { Telop } from './Telop'
+import { Title } from './Title'
+import { Wipe } from './Wipe'
 
 import {
   Box,
@@ -25,88 +25,88 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-} from "@chakra-ui/react";
-import { ChakraProvider } from "@chakra-ui/react";
+} from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
 
 const Temp = () => {
-  const useImg = useRef(null) as any;
+  const useImg = useRef(null) as any
 
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('')
 
   //mainImageは多分不要
-  const [mainImage, setMainImage] = useState("");
+  const [mainImage, setMainImage] = useState('')
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files);
-    var blobUrl = window.URL.createObjectURL(files[0]);
-    setMainImage(blobUrl);
-  };
+    if (!e.target.files) return
+    const files = Array.from(e.target.files)
+    var blobUrl = window.URL.createObjectURL(files[0])
+    setMainImage(blobUrl)
+  }
 
   const handleIconImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files);
-    var blobUrl = window.URL.createObjectURL(files[0]);
-    setIconImage(blobUrl);
-  };
+    if (!e.target.files) return
+    const files = Array.from(e.target.files)
+    var blobUrl = window.URL.createObjectURL(files[0])
+    setIconImage(blobUrl)
+  }
 
-  const [image, imageStatus] = useImage(mainImage);
-  const [image1] = useImage("/bangumi.png");
-  const [image2] = useImage("/fukidashi.png");
+  const [image, imageStatus] = useImage(mainImage)
+  const [image1] = useImage('/bangumi.png')
+  const [image2] = useImage('/fukidashi.png')
 
-  const width = 500;
+  const width = 500
 
   // {画像が読み込みおわったら正しいcanvasサイズをセット}
-  const [height, setHeight] = useState(500);
+  const [height, setHeight] = useState(500)
 
   useEffect(() => {
-    if (imageStatus === "loaded") {
+    if (imageStatus === 'loaded') {
       if (image != null) {
-        setHeight((height * image.height) / image.width);
+        setHeight((height * image.height) / image.width)
       }
     }
-  }, [imageStatus]);
+  }, [imageStatus])
 
   // function TelopField() {
-  const stageRef = useRef() as any;
-  const [textState, setTextState] = useState("なんかいい感じのテロップ");
+  const stageRef = useRef() as any
+  const [textState, setTextState] = useState('なんかいい感じのテロップ')
   // const [formtext, setFormText] = useState(textState)
 
   // const handleSubmit = () => { setTextState(textState) };
-  const [titleState, setTitleState1] = useState("タイトルを入力");
-  const [commentState, setCommentState] = useState("便利すぎ");
-  const [iconImage, setIconImage] = useState("/icon.png");
+  const [titleState, setTitleState1] = useState('タイトルを入力')
+  const [commentState, setCommentState] = useState('便利すぎ')
+  const [iconImage, setIconImage] = useState('/icon.png')
 
-  const [image3, image3Status] = useImage(iconImage);
+  const [image3, image3Status] = useImage(iconImage)
   const textChange = (event) => {
-    setTextState(event.target.value);
-  };
+    setTextState(event.target.value)
+  }
   const titleChange1 = (event) => {
-    setTitleState1(event.target.value);
-  };
+    setTitleState1(event.target.value)
+  }
   const commentChange = (event) => {
-    setCommentState(event.target.value);
-  };
+    setCommentState(event.target.value)
+  }
 
   const handleSaveImage = () => {
-    if (!stageRef.current) return;
+    if (!stageRef.current) return
     const dataURL = stageRef.current.toDataURL({
-      mimeType: "image/jpeg",
+      mimeType: 'image/jpeg',
       quality: 0,
       pixelRatio: 2,
-    });
-    setImageUrl(dataURL);
-  };
+    })
+    setImageUrl(dataURL)
+  }
 
   const OverlayOne = () => (
     <ModalOverlay
       bg="blackAlpha.300"
       backdropFilter="blur(10px) hue-rotate(90deg)"
     />
-  );
+  )
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [overlay, setOverlay] = React.useState(<OverlayOne />);
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [overlay, setOverlay] = React.useState(<OverlayOne />)
 
   return (
     <>
@@ -125,19 +125,19 @@ const Temp = () => {
           minWidth="500px"
           width="full"
           borderBottom={1}
-          borderStyle={"solid"}
-          align={"center"}
+          borderStyle={'solid'}
+          align={'center'}
           py={4}
-          px={{ base: "20px", md: "100px" }}
-          borderColor={"gray.200"}
-          bg={"white"}
-          color={"gray.600"}
+          px={{ base: '20px', md: '100px' }}
+          borderColor={'gray.200'}
+          bg={'white'}
+          color={'gray.600'}
         >
           <ChakraUIText
-            textAlign={{ base: "center", md: "left" }}
-            fontFamily={"Nico Moji"}
-            fontSize={{ base: "4xl", md: "left" }}
-            color={"gray.800"}
+            textAlign={{ base: 'center', md: 'left' }}
+            fontFamily={'Nico Moji'}
+            fontSize={{ base: '4xl', md: 'left' }}
+            color={'gray.800'}
           >
             テロップつくるくん
           </ChakraUIText>
@@ -148,16 +148,21 @@ const Temp = () => {
           </Link>
         </Flex>
 
-        <Container maxW="2xl" pt={{ base: "12", md: "12" }} pb={1} px={4}>
+        <Container maxW="2xl" pt={{ base: '12', md: '12' }} pb={1} px={4}>
           <Flex flexDirection="column">
             <Stack height={height + 50}>
               {/* 仮置きでアイドル画像をImgタグで表示しています */}
-              <Box rounded={"lg"} boxSize={{ base: "320px", lg: "500px" }}>
+              <Box rounded={'lg'} boxSize={{ base: '320px', lg: '500px' }}>
                 <link
                   href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap"
                   rel="stylesheet"
                 />
-                <Stage ref={stageRef} width={width} height={height}>
+                <Stage
+                  ref={stageRef}
+                  width={width}
+                  height={height}
+                  listening={false}
+                >
                   <Layer>
                     <Image image={image} width={width} height={height} />
                     <Group x={15} y={25}>
@@ -231,9 +236,9 @@ const Temp = () => {
               <Button
                 colorScheme="blue"
                 onClick={() => {
-                  handleSaveImage();
-                  setOverlay(<OverlayOne />);
-                  onOpen();
+                  handleSaveImage()
+                  setOverlay(<OverlayOne />)
+                  onOpen()
                 }}
               >
                 保存する
@@ -262,7 +267,7 @@ const Temp = () => {
           mx="auto"
           maxW="8xl"
           py={10}
-          px={{ base: "4", md: "8" }}
+          px={{ base: '4', md: '8' }}
         >
           <ChakraUIText fontSize="sm">
             &copy; {new Date().getFullYear()} なんちゃらかんちゃらシステム開発 ,
@@ -271,7 +276,7 @@ const Temp = () => {
         </Box>
       </ChakraProvider>
     </>
-  );
-};
+  )
+}
 
-export default Temp;
+export default Temp
