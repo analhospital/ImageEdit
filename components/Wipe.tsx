@@ -2,7 +2,8 @@ import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
 import Konva from 'konva'
 
 export const Wipe = ({ image3Status, image2, image3, commentState, width }) => {
-  const radius = width / 12
+  const scale = width / 500
+  const radius = 40 * scale
   const waku_ratio = 0.1
   function RoundedImage() {
     if (image3Status !== 'loaded') {
@@ -21,7 +22,7 @@ export const Wipe = ({ image3Status, image2, image3, commentState, width }) => {
     }
   }
   function WipeText() {
-    const fontsize = 18
+    const fontsize = 18 * scale
     const fontfamily = 'Kiwi Maru'
     const text_length = new Konva.Text({
       text: commentState + '    ',
@@ -32,18 +33,16 @@ export const Wipe = ({ image3Status, image2, image3, commentState, width }) => {
       return <Group></Group>
     } else {
       return (
-        <Group x={(radius * 2) / 3} y={radius * 2}>
+        <Group x={20 * scale} y={95*scale}>
           <Image
             image={image2}
-            x={3 - text_length * 0.05}
-            y={1}
-            scaleX={(0.18 * text_length) / 90}
-            scaleY={0.3}
+            x={-5 * scale - text_length * 0.05}
+            y={-11 * scale}
+            scaleX={0.002 * text_length}
+            scaleY={0.3*scale}
           />
           <Text
             text={commentState}
-            x={10}
-            y={14}
             fontSize={fontsize}
             fontFamily={fontfamily}
             align="left"
@@ -56,7 +55,7 @@ export const Wipe = ({ image3Status, image2, image3, commentState, width }) => {
     }
   }
   return (
-    <Group x={radius * waku_ratio} y={radius * waku_ratio}>
+    <Group x={15*scale} y={20*scale}>
       <Circle
         x={radius}
         y={radius}
