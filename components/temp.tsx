@@ -385,7 +385,7 @@ const Temp = () => {
 
         <Modal isCentered isOpen={isOpen} onClose={onClose}>
           {overlay}
-          <ModalContent justify="center" align="center">
+          <ModalContent>
             <ModalHeader>画像が生成されました！</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
