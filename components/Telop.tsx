@@ -2,7 +2,8 @@ import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
 import Konva from 'konva'
 
 export const Telop = ({ width, height, textState }) => {
-  const fontsize = 35
+  const scale = width / 500
+  const fontsize = 35 * scale
   const fontfamily = "'YuMincho', 'Yu Mincho', 'serif'"
   const fontstyle = 'italic'
   const r = 180
