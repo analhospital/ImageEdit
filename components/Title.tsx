@@ -23,7 +23,7 @@ export const Title = ({ width, image1, titleState }) => {
         y={1}
         scaleX={(0.1 * text_length) / 164}
         scaleY={0.15}
-        scale={width * 0.8}
+        // scale={width * 0.8}
       />
       <Text
         text={titleState}

@@ -132,6 +132,72 @@ const Temp = () => {
     />
   )
 
+  const handleWebShare = () => {
+    const toBlob = (base64) => {
+      const decodedData = atob(base64.replace(/^.*,/, ''))
+      const buffers = new Uint8Array(decodedData.length)
+      for (let i = 0; i < decodedData.length; i++) {
+        buffers[i] = decodedData.charCodeAt(i)
+      }
+      try {
+        const blob = new Blob([buffers.buffer], {
+          type: 'image/png',
+        })
+        return blob
+      } catch (e) {
+        return null
+      }
+    }
+
+    const blob = toBlob(imageUrl)
+    if (!blob) return
+    const imageFile = new File([blob], 'image.png', {
+      type: 'image/png',
+    })
+    const shareData = {
+      text: '#テロップつくるくん',
+      url: 'https://telopkun.com',
+      files: [imageFile],
+    }
+
+    navigator
+      .share(shareData)
+      .then(() => {
+        console.log('Share was successful.')
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const ShareButton = () => {
+    if (!navigator.canShare) {
+      console.log('cannnot share (for PC)')
+      return <></>
+    }
+    // TODO: ここのcanShareをtextではなく{files: なんか[イメージの型]}にしたら、機能が使える端末でだけシェアボタンが表示できるはず
+    // 動作確認できないのでそのまま投げます
+    else if (navigator.canShare({ text: '#テロップつくるくん' })) {
+      console.log('can share (for mobile)')
+      return (
+        <Button
+          colorScheme="blue"
+          onClick={() => {
+            handleSaveImage()
+            handleWebShare()
+          }}
+        >
+          Web Share API test
+        </Button>
+      )
+    } else {
+      // 古いバージョンだとfilesで画像がシェアできない
+      console.log('cannot share (for old mobile)')
+      return <></>
+    }
+    return <></>
+  }
+
   const canvasSize = useMemo(() => {
     return {
       width: !canvasImageResponsiveSize.width
@@ -300,6 +366,7 @@ const Temp = () => {
               >
                 保存する
               </Button>
+              <ShareButton />
             </Stack>
           </Flex>
         </Container>
