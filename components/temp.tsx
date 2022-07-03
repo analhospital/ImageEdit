@@ -4,6 +4,7 @@ import useImage from 'use-image'
 import {
   Text as ChakraUIText,
   useDisclosure,
+  StackDivider,
   Tabs,
   TabList,
   TabPanels,
@@ -35,6 +36,8 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react'
 import { ChakraProvider } from '@chakra-ui/react'
+
+const tabName = ['コマ画像', 'テロップ', 'ワイプ', '番組名']
 
 const Temp = () => {
   const [imageUrl, setImageUrl] = useState('')
@@ -81,19 +84,19 @@ const Temp = () => {
       setCanvasImageResponsiveSize({
         width:
           image.width < displaySize.width
-            ? image.width > 600
-              ? 600
+            ? image.width > 640
+              ? 640
               : image.width
-            : displaySize.width > 600
-            ? 600
+            : displaySize.width > 640
+            ? 640
             : displaySize.width,
         height:
           image.width < displaySize.width
-            ? image.width > 600
-              ? 600 * ratio
+            ? image.width > 640
+              ? 640 * ratio
               : image.height
-            : displaySize.width > 600
-            ? 600 * ratio
+            : displaySize.width > 640
+            ? 640 * ratio
             : displaySize.width * ratio,
       })
     }
@@ -267,14 +270,100 @@ const Temp = () => {
 
         <Container
           maxW="2xl"
-          pt={{ base: '12', md: '12' }}
+          pt={{ base: '2', md: '6' }}
           pb={1}
           px={4}
           width="full"
         >
           <Flex flexDirection="column">
-            <Stack height={canvasSize.height + 50}>
-              <Box rounded={'lg'} boxSize={{ base: '320px', lg: '500px' }}>
+            <Tabs isFitted variant="enclosed" defaultIndex={1} mb={6}>
+              <TabList>
+                {tabName.map((n) => (
+                  <Tab fontSize={'0.8rem'} key={n}>
+                    {n}
+                  </Tab>
+                ))}
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Stack spacing={2}>
+                    <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
+                      コマ画像
+                    </ChakraUIText>
+                    <input
+                      type="file"
+                      name="file"
+                      id="file"
+                      onChange={handleFileChange}
+                    />
+                  </Stack>
+                </TabPanel>
+
+                <TabPanel>
+                  <Stack spacing={2}>
+                    <>
+                      <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
+                        アイコン
+                      </ChakraUIText>
+                      <input
+                        type="file"
+                        name="file"
+                        id="file"
+                        onChange={handleIconImageChange}
+                      />
+                    </>
+                    <>
+                      <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
+                        ツッコミ
+                      </ChakraUIText>
+                      <Input
+                        inputMode="text"
+                        placeholder="どういうお笑い"
+                        value={commentState}
+                        onChange={commentChange}
+                      />
+                    </>
+                  </Stack>
+                </TabPanel>
+                <TabPanel>
+                  <Stack spacing={2}>
+                    <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
+                      テロップ
+                    </ChakraUIText>
+                    <Input
+                      inputMode="text"
+                      placeholder="どういうお笑い"
+                      value={textState}
+                      onChange={textChange}
+                    />
+                  </Stack>
+                </TabPanel>
+                <TabPanel>
+                  <Stack spacing={2}>
+                    <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
+                      番組名
+                    </ChakraUIText>
+                    <Input
+                      inputMode="text"
+                      placeholder="@TwitterJP"
+                      value={titleState}
+                      onChange={titleChange1}
+                    />
+                  </Stack>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+
+            <Stack
+              height={canvasSize.height + 50}
+              justify={'center'}
+              align={'center'}
+            >
+              <Box
+                rounded={'lg'}
+                boxSize={{ base: '320px', lg: '640px' }}
+                mt={6}
+              >
                 <link
                   href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap"
                   rel="stylesheet"
@@ -284,8 +373,7 @@ const Temp = () => {
                   width={canvasSize.width}
                   height={canvasSize.height}
                   listening={false}
-                  justify={'center'}
-                  align={'center'}
+                  mt={2}
                 >
                   <Layer>
                     <Image
@@ -326,44 +414,8 @@ const Temp = () => {
                 hidden
               ></canvas>
             </Stack>
+
             <Stack spacing={4}>
-              <ChakraUIText fontWeight="semibold">コマ画像</ChakraUIText>
-              <input
-                type="file"
-                name="file"
-                id="file"
-                onChange={handleFileChange}
-              />
-              <ChakraUIText fontWeight="semibold">アイコン</ChakraUIText>
-              <input
-                type="file"
-                name="file"
-                id="file"
-                onChange={handleIconImageChange}
-              />
-              <ChakraUIText fontWeight="semibold">テロップ</ChakraUIText>
-              <Input
-                inputMode="text"
-                placeholder="どういうお笑い"
-                value={textState}
-                onChange={textChange}
-              />
-              <ChakraUIText fontWeight="semibold">ツッコミ</ChakraUIText>
-              <Input
-                inputMode="text"
-                placeholder="どういうお笑い"
-                value={commentState}
-                onChange={commentChange}
-              />
-
-              <ChakraUIText fontWeight="semibold">番組名</ChakraUIText>
-              <Input
-                inputMode="text"
-                placeholder="@TwitterJP"
-                value={titleState}
-                onChange={titleChange1}
-              />
-
               <Button
                 colorScheme="blue"
                 onClick={() => {
