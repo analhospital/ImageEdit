@@ -293,22 +293,18 @@ const Temp = () => {
                       width={canvasSize.width}
                       height={canvasSize.height}
                     />
-                    <Group x={15} y={25}>
-                      <Wipe
-                        image3Status={image3Status}
-                        image2={image2}
-                        image3={image3}
-                        commentState={commentState}
-                        width={canvasSize.width}
-                      />
-                    </Group>
-                    <Group x={0} y={0}>
-                      <Title
-                        width={canvasSize.width}
-                        image1={image1}
-                        titleState={titleState}
-                      />
-                    </Group>
+                    <Wipe
+                      image3Status={image3Status}
+                      image2={image2}
+                      image3={image3}
+                      commentState={commentState}
+                      width={canvasSize.width}
+                    />
+                    <Title
+                      width={canvasSize.width}
+                      image1={image1}
+                      titleState={titleState}
+                    />
                     <Telop
                       width={canvasSize.width}
                       height={canvasSize.height}
