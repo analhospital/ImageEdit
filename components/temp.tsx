@@ -133,6 +133,12 @@ const Temp = () => {
   )
 
   const handleWebShare = () => {
+    if (!stageRef.current) return
+    const dataURL = stageRef.current.toDataURL({
+      mimeType: 'image/jpeg',
+      quality: 0,
+      pixelRatio: window.devicePixelRatio,
+    })
     const toBlob = (base64) => {
       const decodedData = atob(base64.replace(/^.*,/, ''))
       const buffers = new Uint8Array(decodedData.length)
@@ -149,7 +155,7 @@ const Temp = () => {
       }
     }
 
-    const blob = toBlob(imageUrl)
+    const blob = toBlob(dataURL)
     if (!blob) return
     const imageFile = new File([blob], 'image.png', {
       type: 'image/png',
@@ -175,28 +181,26 @@ const Temp = () => {
       console.log('cannnot share (for PC)')
       return <></>
     }
-    // TODO: ここのcanShareをtextではなく{files: なんか[イメージの型]}にしたら、機能が使える端末でだけシェアボタンが表示できるはず
-    // 動作確認できないのでそのまま投げます
-    else if (navigator.canShare({ text: '#テロップつくるくん' })) {
-      console.log('can share (for mobile)')
-      return (
-        <Button
-          colorScheme="blue"
-          onClick={() => {
-            handleSaveImage()
-            handleWebShare()
-          }}
-        >
-          Web Share API test
-        </Button>
-      )
-    } else {
-      // 古いバージョンだとfilesで画像がシェアできない
-      console.log('cannot share (for old mobile)')
-      return <></>
-    }
-    return <></>
-  }
+    else {
+      const checkShare = new File(["check"], "check", {type: "image/png"})
+      if (navigator.canShare({files: [checkShare]})) {
+        console.log('can share (for mobile)')
+        return (
+          <Button
+            colorScheme="blue"
+            onClick={() => {
+              handleWebShare()
+            }}
+          >
+            Web Share API test
+          </Button>
+        )
+      } else {
+        // 古いバージョンだとfilesで画像がシェアできない
+        console.log('cannot share (for old mobile)')
+        return <></>
+      }
+  }}
 
   const canvasSize = useMemo(() => {
     return {
