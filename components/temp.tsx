@@ -1,9 +1,16 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
 import useImage from 'use-image'
-import { Text as ChakraUIText, useDisclosure } from '@chakra-ui/react'
+import {
+  Text as ChakraUIText,
+  useDisclosure,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from '@chakra-ui/react'
 import Head from 'next/head'
-
 import { Telop } from './Telop'
 import { Title } from './Title'
 import { Wipe } from './Wipe'
@@ -194,7 +201,7 @@ const Temp = () => {
               handleWebShare()
             }}
           >
-            Web Share API test
+            みんなに見せる
           </Button>
         )
       } else {
@@ -215,9 +222,6 @@ const Temp = () => {
         : canvasImageResponsiveSize.height * 0.92,
     }
   }, [canvasImageResponsiveSize])
-
-  console.log(canvasImageResponsiveSize)
-  console.log(canvasSize)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [overlay, setOverlay] = React.useState(<OverlayOne />)
@@ -381,14 +385,17 @@ const Temp = () => {
 
         <Modal isCentered isOpen={isOpen} onClose={onClose}>
           {overlay}
-          <ModalContent>
+          <ModalContent justify="center" align="center">
             <ModalHeader>画像が生成されました！</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <img src={imageUrl} />
             </ModalBody>
+
             <ModalFooter>
-              <Button onClick={onClose}>Close</Button>
+              <Flex width="full" height={50} justify="center" align="center">
+                <ShareButton />
+              </Flex>
             </ModalFooter>
           </ModalContent>
         </Modal>
