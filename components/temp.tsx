@@ -161,8 +161,7 @@ const Temp = () => {
       type: 'image/png',
     })
     const shareData = {
-      text: '#テロップつくるくん',
-      url: 'https://telopkun.com',
+      text: '#テロップつくるくん https://image-edit-khaki.vercel.app/',
       files: [imageFile],
     }
 
