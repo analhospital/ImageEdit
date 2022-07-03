@@ -74,15 +74,19 @@ const Temp = () => {
       setCanvasImageResponsiveSize({
         width:
           image.width < displaySize.width
-            ? image.width > 800
-              ? 800
+            ? image.width > 600
+              ? 600
               : image.width
+            : displaySize.width > 600
+            ? 600
             : displaySize.width,
         height:
           image.width < displaySize.width
-            ? image.width > 800
-              ? 800 * ratio
+            ? image.width > 600
+              ? 600 * ratio
               : image.height
+            : displaySize.width > 600
+            ? 600 * ratio
             : displaySize.width * ratio,
       })
     }
@@ -179,10 +183,9 @@ const Temp = () => {
     if (!navigator.canShare) {
       console.log('cannnot share (for PC)')
       return <></>
-    }
-    else {
-      const checkShare = new File(["check"], "check", {type: "image/png"})
-      if (navigator.canShare({files: [checkShare]})) {
+    } else {
+      const checkShare = new File(['check'], 'check', { type: 'image/png' })
+      if (navigator.canShare({ files: [checkShare] })) {
         console.log('can share (for mobile)')
         return (
           <Button
@@ -199,7 +202,8 @@ const Temp = () => {
         console.log('cannot share (for old mobile)')
         return <></>
       }
-  }}
+    }
+  }
 
   const canvasSize = useMemo(() => {
     return {
@@ -212,6 +216,7 @@ const Temp = () => {
     }
   }, [canvasImageResponsiveSize])
 
+  console.log(canvasImageResponsiveSize)
   console.log(canvasSize)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
