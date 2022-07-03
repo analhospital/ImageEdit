@@ -16,6 +16,7 @@ import { Wipe } from './Wipe'
 import { ShareButton } from './ShareButton'
 
 import { useGetWindowSize } from '../hooks/useGetWindowSize'
+import { convertStageRefToDataUrl } from '../utils/convertStageRefToDataUrl'
 
 import {
   Box,
@@ -37,8 +38,16 @@ const tabName = ['コマ画像', 'テロップ', 'ワイプ', '番組名']
 
 const Main = () => {
   const [imageUrl, setImageUrl] = useState('')
-
   const [mainImage, setMainImage] = useState('')
+  const [image, imageStatus] = useImage(mainImage)
+  const [image1] = useImage('/bangumi.png')
+  const [image2] = useImage('/fukidashi.png')
+  const stageRef = useRef() as any
+  const [textState, setTextState] = useState('なんかいい感じのテロップ')
+  const [titleState, setTitleState] = useState('タイトルを入力')
+  const [commentState, setCommentState] = useState('便利すぎ')
+  const [iconImage, setIconImage] = useState('/icon.png')
+  const [image3, image3Status] = useImage(iconImage)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
@@ -54,23 +63,35 @@ const Main = () => {
     setIconImage(blobUrl)
   }
 
-  const [image, imageStatus] = useImage(mainImage)
-  const [image1] = useImage('/bangumi.png')
-  const [image2] = useImage('/fukidashi.png')
-
   const displaySize = useGetWindowSize()
-
-  const [canvasImageResponsiveSize, setCanvasImageResponsiveSize] = useState({
-    width: 0,
-    height: 0,
-  })
-
   const width = useMemo(
     () => (displaySize.width > 500 ? 500 : displaySize.width),
     [displaySize.width]
   )
   //初期表示時、画面サイズに準拠した４：３の画像を表示する
   const canvasInitWidth = useMemo(() => width * 0.8, [width])
+
+  const [canvasImageResponsiveSize, setCanvasImageResponsiveSize] = useState({
+    width: 0,
+    height: 0,
+  })
+  useEffect(() => {
+    setCanvasImageResponsiveSize({
+      width: canvasInitWidth,
+      height: (canvasInitWidth * 3) / 4,
+    })
+  }, [])
+
+  const canvasSize = useMemo(() => {
+    return {
+      width: !canvasImageResponsiveSize.width
+        ? 320
+        : canvasImageResponsiveSize.width * 0.92,
+      height: !canvasImageResponsiveSize.height
+        ? 240
+        : canvasImageResponsiveSize.height * 0.92,
+    }
+  }, [canvasImageResponsiveSize])
 
   useEffect(() => {
     if (imageStatus === 'loaded' && image) {
@@ -96,130 +117,7 @@ const Main = () => {
     }
   }, [imageStatus])
 
-  useEffect(() => {
-    setCanvasImageResponsiveSize({
-      width: canvasInitWidth,
-      height: (canvasInitWidth * 3) / 4,
-    })
-  }, [])
-
-  const stageRef = useRef() as any
-  const [textState, setTextState] = useState('なんかいい感じのテロップ')
-  // const [formtext, setFormText] = useState(textState)
-
-  // const handleSubmit = () => { setTextState(textState) };
-  const [titleState, setTitleState1] = useState('タイトルを入力')
-  const [commentState, setCommentState] = useState('便利すぎ')
-  const [iconImage, setIconImage] = useState('/icon.png')
-
-  const [image3, image3Status] = useImage(iconImage)
-  const textChange = (event) => {
-    setTextState(event.target.value)
-  }
-  const titleChange1 = (event) => {
-    setTitleState1(event.target.value)
-  }
-  const commentChange = (event) => {
-    setCommentState(event.target.value)
-  }
-
-  const handleSaveImage = () => {
-    if (!stageRef.current) return
-    const dataURL = stageRef.current.toDataURL({
-      mimeType: 'image/jpeg',
-      quality: 0,
-      pixelRatio: window.devicePixelRatio,
-    })
-    setImageUrl(dataURL)
-  }
-
-  // const handleWebShare = () => {
-  //   if (!stageRef.current) return
-  //   const dataURL = stageRef.current.toDataURL({
-  //     mimeType: 'image/jpeg',
-  //     quality: 0,
-  //     pixelRatio: window.devicePixelRatio,
-  //   })
-  //   const toBlob = (base64) => {
-  //     const decodedData = atob(base64.replace(/^.*,/, ''))
-  //     const buffers = new Uint8Array(decodedData.length)
-  //     for (let i = 0; i < decodedData.length; i++) {
-  //       buffers[i] = decodedData.charCodeAt(i)
-  //     }
-  //     try {
-  //       const blob = new Blob([buffers.buffer], {
-  //         type: 'image/png',
-  //       })
-  //       return blob
-  //     } catch (e) {
-  //       return null
-  //     }
-  //   }
-
-  //   const blob = toBlob(dataURL)
-  //   if (!blob) return
-  //   const imageFile = new File([blob], 'image.png', {
-  //     type: 'image/png',
-  //   })
-  //   const shareData = {
-  //     text: '#テロップつくるくん https://image-edit-khaki.vercel.app/',
-  //     files: [imageFile],
-  //   }
-
-  //   navigator
-  //     .share(shareData)
-  //     .then(() => {
-  //       console.log('Share was successful.')
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //     })
-  // }
-
-  // const ShareButton = () => {
-  //   if (!navigator.canShare) {
-  //     // console.log('cannnot share (for PC)')
-  //     return <></>
-  //   } else {
-  //     const checkShare = new File(['check'], 'check', { type: 'image/png' })
-  //     if (navigator.canShare({ files: [checkShare] })) {
-  //       // console.log('can share (for mobile)')
-  //       return (
-  //         <Button
-  //           colorScheme="blue"
-  //           onClick={() => {
-  //             handleWebShare()
-  //           }}
-  //         >
-  //           みんなに見せる
-  //         </Button>
-  //       )
-  //     } else {
-  //       // 古いバージョンだとfilesで画像がシェアできない
-  //       // console.log('cannot share (for old mobile)')
-  //       return <></>
-  //     }
-  //   }
-  // }
-
-  const canvasSize = useMemo(() => {
-    return {
-      width: !canvasImageResponsiveSize.width
-        ? 320
-        : canvasImageResponsiveSize.width * 0.92,
-      height: !canvasImageResponsiveSize.height
-        ? 240
-        : canvasImageResponsiveSize.height * 0.92,
-    }
-  }, [canvasImageResponsiveSize])
-
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [overlay, setOverlay] = React.useState(
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  )
 
   return (
     <>
@@ -275,7 +173,9 @@ const Main = () => {
                       inputMode="text"
                       placeholder="どういうお笑い"
                       value={commentState}
-                      onChange={commentChange}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setCommentState(e.target.value)
+                      }}
                     />
                   </>
                 </Stack>
@@ -289,7 +189,9 @@ const Main = () => {
                     inputMode="text"
                     placeholder="どういうお笑い"
                     value={textState}
-                    onChange={textChange}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setTextState(e.target.value)
+                    }}
                   />
                 </Stack>
               </TabPanel>
@@ -302,7 +204,9 @@ const Main = () => {
                     inputMode="text"
                     placeholder="@TwitterJP"
                     value={titleState}
-                    onChange={titleChange1}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setTitleState(e.target.value)
+                    }}
                   />
                 </Stack>
               </TabPanel>
@@ -370,19 +274,23 @@ const Main = () => {
             <Button
               colorScheme="blue"
               onClick={() => {
-                handleSaveImage()
+                const dataURL = convertStageRefToDataUrl(stageRef.current)
+                setImageUrl(dataURL)
                 onOpen()
               }}
             >
               保存する
             </Button>
-            <ShareButton stageRefCurrent={stageRef.current} />
+            <ShareButton dataUrl={convertStageRefToDataUrl(stageRef.current)} />
           </Stack>
         </Flex>
       </Container>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        {overlay}
+        <ModalOverlay
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px) hue-rotate(90deg)"
+        />
         <ModalContent>
           <ModalHeader>画像が生成されました！</ModalHeader>
           <ModalCloseButton />
@@ -392,7 +300,7 @@ const Main = () => {
 
           <ModalFooter>
             <Flex width="full" height={50} justify="center" align="center">
-              <ShareButton stageRefCurrent={stageRef.current} />
+              <ShareButton dataUrl={imageUrl} />
             </Flex>
           </ModalFooter>
         </ModalContent>

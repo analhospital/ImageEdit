@@ -1,12 +1,7 @@
 import { Button } from '@chakra-ui/react'
+// import { convertStageRefToDataUrl } from '../utils/convertStageRefToDataUrl'
 
-const handleWebShare = (stageRefCurrent) => {
-  if (!stageRefCurrent) return
-  const dataURL = stageRefCurrent.toDataURL({
-    mimeType: 'image/jpeg',
-    quality: 0,
-    pixelRatio: window.devicePixelRatio,
-  })
+const handleWebShare = (dataUrl) => {
   const toBlob = (base64) => {
     const decodedData = atob(base64.replace(/^.*,/, ''))
     const buffers = new Uint8Array(decodedData.length)
@@ -23,7 +18,7 @@ const handleWebShare = (stageRefCurrent) => {
     }
   }
 
-  const blob = toBlob(dataURL)
+  const blob = toBlob(dataUrl)
   if (!blob) return
   const imageFile = new File([blob], 'image.png', {
     type: 'image/png',
@@ -43,7 +38,7 @@ const handleWebShare = (stageRefCurrent) => {
     })
 }
 
-export const ShareButton = ({ stageRefCurrent }) => {
+export const ShareButton = ({ dataUrl }) => {
   if (!navigator.canShare) {
     // console.log('cannnot share (for PC)')
     return <></>
@@ -55,7 +50,7 @@ export const ShareButton = ({ stageRefCurrent }) => {
         <Button
           colorScheme="blue"
           onClick={() => {
-            handleWebShare(stageRefCurrent)
+            handleWebShare(dataUrl)
           }}
         >
           みんなに見せる
