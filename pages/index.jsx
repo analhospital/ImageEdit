@@ -1,15 +1,15 @@
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic'
 
 //SSRでエラーになるのを回避している
-let Temp = dynamic(() => import("../components/temp"), {
+let Main = dynamic(() => import('../components/Main'), {
   ssr: false,
-});
+})
 
 const Index = () => {
   return (
     <>
-      <Temp />
+      <Main />
     </>
-  );
-};
-export default Index;
+  )
+}
+export default Index
