@@ -4,6 +4,7 @@ import useImage from 'use-image'
 import {
   Text as ChakraUIText,
   useDisclosure,
+  Center,
   Tabs,
   TabList,
   TabPanels,
@@ -129,7 +130,7 @@ const Main = () => {
         width="full"
       >
         <Flex flexDirection="column">
-          <Tabs isFitted variant="enclosed" defaultIndex={1} mb={6}>
+          <Tabs isFitted variant="enclosed" defaultIndex={0} mb={6}>
             <TabList>
               {tabName.map((n) => (
                 <Tab fontSize={'0.8rem'} key={n}>
@@ -213,48 +214,46 @@ const Main = () => {
             </TabPanels>
           </Tabs>
 
-          <Stack
-            height={canvasSize.height + 50}
-            justify={'center'}
-            align={'center'}
-          >
+          <Stack height={canvasSize.height + 50}>
             <Box rounded={'lg'} boxSize={{ base: '320px', lg: '640px' }} mt={6}>
               <link
                 href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap"
                 rel="stylesheet"
               />
-              <Stage
-                ref={stageRef}
-                width={canvasSize.width}
-                height={canvasSize.height}
-                listening={false}
-                mt={2}
-              >
-                <Layer>
-                  <Image
-                    image={image}
-                    width={canvasSize.width}
-                    height={canvasSize.height}
-                  />
-                  <Wipe
-                    image3Status={image3Status}
-                    image2={image2}
-                    image3={image3}
-                    commentState={commentState}
-                    width={canvasSize.width}
-                  />
-                  <Title
-                    width={canvasSize.width}
-                    image1={image1}
-                    titleState={titleState}
-                  />
-                  <Telop
-                    width={canvasSize.width}
-                    height={canvasSize.height}
-                    textState={textState}
-                  />
-                </Layer>
-              </Stage>
+              <Center h="70%">
+                <Stage
+                  ref={stageRef}
+                  width={canvasSize.width}
+                  height={canvasSize.height}
+                  listening={false}
+                  mt={2}
+                >
+                  <Layer>
+                    <Image
+                      image={image}
+                      width={canvasSize.width}
+                      height={canvasSize.height}
+                    />
+                    <Wipe
+                      image3Status={image3Status}
+                      image2={image2}
+                      image3={image3}
+                      commentState={commentState}
+                      width={canvasSize.width}
+                    />
+                    <Title
+                      width={canvasSize.width}
+                      image1={image1}
+                      titleState={titleState}
+                    />
+                    <Telop
+                      width={canvasSize.width}
+                      height={canvasSize.height}
+                      textState={textState}
+                    />
+                  </Layer>
+                </Stage>
+              </Center>
             </Box>
           </Stack>
 
