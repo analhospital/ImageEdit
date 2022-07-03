@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
 import useImage from 'use-image'
 import { Text as ChakraUIText, useDisclosure } from '@chakra-ui/react'
@@ -53,19 +53,47 @@ const Temp = () => {
   const [image1] = useImage('/bangumi.png')
   const [image2] = useImage('/fukidashi.png')
 
-  const size = useGetWindowSize()
-  console.log('画面サイズ：', size)
+  const displaySize = useGetWindowSize()
+  console.log('画面サイズ：', displaySize)
 
-  const width = size.width > 500 ? 500 : size.width
+  const [canvasImageResponsiveSize, setCanvasImageResponsiveSize] = useState({
+    width: 0,
+    height: 0,
+  })
 
-  // {画像が読み込みおわったら正しいcanvasサイズをセット}
-  const [height, setHeight] = useState(500)
+  const width = useMemo(
+    () => (displaySize.width > 500 ? 500 : displaySize.width),
+    [displaySize.width]
+  )
+  //初期表示時、画面サイズに準拠した４：３の画像を表示する
+  const canvasInitWidth = useMemo(() => width * 0.8, [width])
 
   useEffect(() => {
-    if (imageStatus === 'loaded' && image != null) {
-      setHeight((500 * image.height) / image.width)
+    if (imageStatus === 'loaded' && image) {
+      const ratio = image.height / image.width
+      setCanvasImageResponsiveSize({
+        width:
+          image.width < displaySize.width
+            ? image.width > 800
+              ? 800
+              : image.width
+            : displaySize.width,
+        height:
+          image.width < displaySize.width
+            ? image.width > 800
+              ? 800 * ratio
+              : image.height
+            : displaySize.width * ratio,
+      })
     }
   }, [imageStatus])
+
+  useEffect(() => {
+    setCanvasImageResponsiveSize({
+      width: canvasInitWidth,
+      height: (canvasInitWidth * 3) / 4,
+    })
+  }, [])
 
   const stageRef = useRef() as any
   const [textState, setTextState] = useState('なんかいい感じのテロップ')
@@ -104,6 +132,19 @@ const Temp = () => {
     />
   )
 
+  const canvasSize = useMemo(() => {
+    return {
+      width: !canvasImageResponsiveSize.width
+        ? 320
+        : canvasImageResponsiveSize.width * 0.92,
+      height: !canvasImageResponsiveSize.height
+        ? 240
+        : canvasImageResponsiveSize.height * 0.92,
+    }
+  }, [canvasImageResponsiveSize])
+
+  console.log(canvasSize)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [overlay, setOverlay] = React.useState(<OverlayOne />)
 
@@ -134,7 +175,7 @@ const Temp = () => {
           <ChakraUIText
             textAlign={{ base: 'center', md: 'left' }}
             fontFamily={'Nico Moji'}
-            fontSize={{ base: '3xl', md: 'left' }}
+            fontSize={{ base: '2xl', md: 'left' }}
             color={'gray.800'}
           >
             テロップつくるくん
@@ -154,7 +195,7 @@ const Temp = () => {
           width="full"
         >
           <Flex flexDirection="column">
-            <Stack height={height + 50}>
+            <Stack height={canvasSize.height + 50}>
               <Box rounded={'lg'} boxSize={{ base: '320px', lg: '500px' }}>
                 <link
                   href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap"
@@ -162,37 +203,54 @@ const Temp = () => {
                 />
                 <Stage
                   ref={stageRef}
-                  width={width}
-                  height={height}
+                  width={canvasSize.width}
+                  height={canvasSize.height}
                   listening={false}
+                  justify={'center'}
+                  align={'center'}
                 >
                   <Layer>
-                    <Image image={image} width={width} height={height} />
+                    <Image
+                      image={image}
+                      width={canvasSize.width}
+                      height={canvasSize.height}
+                    />
                     <Group x={15} y={25}>
                       <Wipe
                         image3Status={image3Status}
                         image2={image2}
                         image3={image3}
                         commentState={commentState}
+                        width={canvasSize.width}
                       />
                     </Group>
                     <Group x={0} y={0}>
                       <Title
-                        width={width}
+                        width={canvasSize.width}
                         image1={image1}
                         titleState={titleState}
                       />
                     </Group>
                     <Telop
-                      width={width}
-                      height={height}
+                      width={canvasSize.width}
+                      height={canvasSize.height}
                       textState={textState}
                     />
                   </Layer>
                 </Stage>
               </Box>
-              <canvas id="my-canvas" width="500" height="500" hidden></canvas>
-              <canvas id="icon" width="500" height="500" hidden></canvas>
+              <canvas
+                id="my-canvas"
+                width={canvasSize.width}
+                height={canvasSize.height}
+                hidden
+              ></canvas>
+              <canvas
+                id="icon"
+                width={canvasSize.width}
+                height={canvasSize.height}
+                hidden
+              ></canvas>
             </Stack>
             <Stack spacing={4}>
               <ChakraUIText fontWeight="semibold">コマ画像</ChakraUIText>

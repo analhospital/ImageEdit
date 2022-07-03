@@ -5,7 +5,7 @@ export const Title = ({ width, image1, titleState }) => {
   if (titleState === '') {
     return <Group></Group>
   }
-  const fontsize = 24
+  const fontsize = 22
   const fontfamily = 'KiWi Maru'
   const text_length = new Konva.Text({
     text: titleState + '    ',
@@ -23,6 +23,7 @@ export const Title = ({ width, image1, titleState }) => {
         y={1}
         scaleX={(0.1 * text_length) / 164}
         scaleY={0.15}
+        scale={width * 0.8}
       />
       <Text
         text={titleState}

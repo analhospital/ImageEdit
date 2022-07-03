@@ -1,8 +1,8 @@
 import { Layer, Rect, Stage, Text, Image, Group, Circle } from 'react-konva'
 import Konva from 'konva'
 
-export const Wipe = ({ image3Status, image2, image3, commentState }) => {
-  const radius = 40
+export const Wipe = ({ image3Status, image2, image3, commentState, width }) => {
+  const radius = width / 12
   const waku_ratio = 0.1
   function RoundedImage() {
     if (image3Status !== 'loaded') {
@@ -32,7 +32,7 @@ export const Wipe = ({ image3Status, image2, image3, commentState }) => {
       return <Group></Group>
     } else {
       return (
-        <Group x={20} y={85}>
+        <Group x={(radius * 2) / 3} y={radius * 2}>
           <Image
             image={image2}
             x={3 - text_length * 0.05}
