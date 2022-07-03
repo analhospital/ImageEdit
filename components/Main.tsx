@@ -256,18 +256,6 @@ const Main = () => {
                 </Layer>
               </Stage>
             </Box>
-            <canvas
-              id="my-canvas"
-              width={canvasSize.width}
-              height={canvasSize.height}
-              hidden
-            ></canvas>
-            <canvas
-              id="icon"
-              width={canvasSize.width}
-              height={canvasSize.height}
-              hidden
-            ></canvas>
           </Stack>
 
           <Stack spacing={4}>
