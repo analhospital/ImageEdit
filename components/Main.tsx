@@ -5,6 +5,8 @@ import {
   Text as ChakraUIText,
   useDisclosure,
   Center,
+  InputGroup,
+  InputLeftAddon,
   Tabs,
   TabList,
   TabPanels,
@@ -35,7 +37,7 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react'
 
-const tabName = ['コマ画像', 'テロップ', 'ワイプ', '番組名']
+const tabName = ['コマ画像', 'ワイプ', '番組名']
 
 const Main = () => {
   const [imageUrl, setImageUrl] = useState('')
@@ -130,10 +132,10 @@ const Main = () => {
         width="full"
       >
         <Flex flexDirection="column">
-          <Tabs isFitted variant="enclosed" defaultIndex={0} mb={6}>
+          <Tabs isFitted variant="solid-rounded" defaultIndex={0} mb={6}>
             <TabList>
               {tabName.map((n) => (
-                <Tab fontSize={'0.8rem'} key={n}>
+                <Tab fontSize={'0.7rem'} key={n}>
                   {n}
                 </Tab>
               ))}
@@ -166,10 +168,9 @@ const Main = () => {
                       onChange={handleIconImageChange}
                     />
                   </>
-                  <>
-                    <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
-                      ツッコミ
-                    </ChakraUIText>
+
+                  <InputGroup>
+                    <InputLeftAddon fontSize="0.8rem" children="ツッコミ" />
                     <Input
                       inputMode="text"
                       placeholder="どういうお笑い"
@@ -178,48 +179,38 @@ const Main = () => {
                         setCommentState(e.target.value)
                       }}
                     />
-                  </>
+                  </InputGroup>
                 </Stack>
               </TabPanel>
               <TabPanel>
-                <Stack spacing={2}>
-                  <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
-                    テロップ
-                  </ChakraUIText>
-                  <Input
-                    inputMode="text"
-                    placeholder="どういうお笑い"
-                    value={textState}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setTextState(e.target.value)
-                    }}
-                  />
-                </Stack>
-              </TabPanel>
-              <TabPanel>
-                <Stack spacing={2}>
-                  <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
-                    番組名
-                  </ChakraUIText>
-                  <Input
-                    inputMode="text"
-                    placeholder="@TwitterJP"
-                    value={titleState}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setTitleState(e.target.value)
-                    }}
-                  />
+                <Stack>
+                  <InputGroup>
+                    <InputLeftAddon fontSize="0.8rem" children="番組名" />
+                    <Input
+                      inputMode="text"
+                      placeholder="@TwitterJP"
+                      value={titleState}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setTitleState(e.target.value)
+                      }}
+                    />
+                  </InputGroup>
                 </Stack>
               </TabPanel>
             </TabPanels>
           </Tabs>
 
-          <Stack height={canvasSize.height + 50}>
+          <Stack
+            height={canvasSize.height + 10}
+            align={'center'}
+            justify={'center'}
+          >
             <Box rounded={'lg'} boxSize={{ base: '320px', lg: '640px' }} mt={6}>
               <link
                 href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap"
                 rel="stylesheet"
               />
+
               <Center h="70%">
                 <Stage
                   ref={stageRef}
@@ -255,6 +246,19 @@ const Main = () => {
                 </Stage>
               </Center>
             </Box>
+          </Stack>
+          <Stack spacing={4} mb={6}>
+            <InputGroup>
+              <InputLeftAddon fontSize="0.8rem" children="テロップ" />
+              <Input
+                inputMode="text"
+                placeholder="どういうお笑い"
+                value={textState}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setTextState(e.target.value)
+                }}
+              />
+            </InputGroup>
           </Stack>
 
           <Stack spacing={4}>
