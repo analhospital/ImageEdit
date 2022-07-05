@@ -12,7 +12,9 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  InputLeftElement,
 } from '@chakra-ui/react'
+
 import { Telop } from './Telop'
 import { Title } from './Title'
 import { Wipe } from './Wipe'
@@ -36,6 +38,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
+import { ImageUploadButton } from './ImageUploadButton'
 
 const tabName = ['コマ画像', 'ワイプ', '番組名']
 
@@ -146,28 +149,17 @@ const Main = () => {
                   <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
                     コマ画像
                   </ChakraUIText>
-                  <input
-                    type="file"
-                    name="file"
-                    id="file"
-                    onChange={handleFileChange}
-                  />
+                  <ImageUploadButton handleFileChange={handleFileChange} />
                 </Stack>
               </TabPanel>
 
               <TabPanel>
                 <Stack spacing={2}>
-                  <>
-                    <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
-                      アイコン
-                    </ChakraUIText>
-                    <input
-                      type="file"
-                      name="file"
-                      id="file"
-                      onChange={handleIconImageChange}
-                    />
-                  </>
+                  <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
+                    アイコン
+                  </ChakraUIText>
+
+                  <ImageUploadButton handleFileChange={handleIconImageChange} />
 
                   <InputGroup>
                     <InputLeftAddon fontSize="0.8rem" children="ツッコミ" />
