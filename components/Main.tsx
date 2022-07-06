@@ -7,6 +7,7 @@ import {
   Center,
   InputGroup,
   InputLeftAddon,
+  HStack,
   Tabs,
   TabList,
   TabPanels,
@@ -135,67 +136,11 @@ const Main = () => {
         width="full"
       >
         <Flex flexDirection="column">
-          <Tabs isFitted variant="solid-rounded" defaultIndex={0} mb={6}>
-            <TabList>
-              {tabName.map((n) => (
-                <Tab fontSize={'0.7rem'} key={n}>
-                  {n}
-                </Tab>
-              ))}
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <Stack spacing={2}>
-                  <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
-                    コマ画像
-                  </ChakraUIText>
-                  <ImageUploadButton handleFileChange={handleFileChange} />
-                </Stack>
-              </TabPanel>
-
-              <TabPanel>
-                <Stack spacing={2}>
-                  <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
-                    アイコン
-                  </ChakraUIText>
-
-                  <ImageUploadButton handleFileChange={handleIconImageChange} />
-
-                  <InputGroup>
-                    <InputLeftAddon fontSize="0.8rem" children="ツッコミ" />
-                    <Input
-                      inputMode="text"
-                      placeholder="どういうお笑い"
-                      value={commentState}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setCommentState(e.target.value)
-                      }}
-                    />
-                  </InputGroup>
-                </Stack>
-              </TabPanel>
-              <TabPanel>
-                <Stack>
-                  <InputGroup>
-                    <InputLeftAddon fontSize="0.8rem" children="番組名" />
-                    <Input
-                      inputMode="text"
-                      placeholder="@TwitterJP"
-                      value={titleState}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setTitleState(e.target.value)
-                      }}
-                    />
-                  </InputGroup>
-                </Stack>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-
           <Stack
             height={canvasSize.height + 10}
             align={'center'}
             justify={'center'}
+            mt={6}
           >
             <Box rounded={'lg'} boxSize={{ base: '320px', lg: '640px' }} mt={6}>
               <link
@@ -238,6 +183,47 @@ const Main = () => {
                 </Stage>
               </Center>
             </Box>
+          </Stack>
+          <Stack spacing={4} mb={6}>
+            <ChakraUIText fontSize={'0.8rem'} fontWeight="semibold">
+              画像アップロード
+            </ChakraUIText>
+            <HStack m={4} justify={'center'} align={'center'}>
+              <ImageUploadButton
+                handleFileChange={handleFileChange}
+                label={'コマ画像'}
+              />
+              <ImageUploadButton
+                handleFileChange={handleIconImageChange}
+                label={'アイコン'}
+              />
+            </HStack>
+          </Stack>
+          <Stack spacing={4} mb={2}>
+            <InputGroup>
+              <InputLeftAddon fontSize="0.8rem" children="番組名" />
+              <Input
+                inputMode="text"
+                placeholder="@TwitterJP"
+                value={titleState}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setTitleState(e.target.value)
+                }}
+              />
+            </InputGroup>
+          </Stack>
+          <Stack spacing={4} mb={2}>
+            <InputGroup>
+              <InputLeftAddon fontSize="0.8rem" children="ツッコミ" />
+              <Input
+                inputMode="text"
+                placeholder="どういうお笑い"
+                value={commentState}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setCommentState(e.target.value)
+                }}
+              />
+            </InputGroup>
           </Stack>
           <Stack spacing={4} mb={6}>
             <InputGroup>

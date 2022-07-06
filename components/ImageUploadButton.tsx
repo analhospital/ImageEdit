@@ -3,7 +3,7 @@ import { Box, Input, Flex, Button } from '@chakra-ui/react'
 import { useRef } from 'react'
 import { AddIcon } from '@chakra-ui/icons'
 
-export const ImageUploadButton = ({ handleFileChange }) => {
+export const ImageUploadButton = ({ handleFileChange, label }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
@@ -25,7 +25,7 @@ export const ImageUploadButton = ({ handleFileChange }) => {
         }}
         colorScheme="teal"
       >
-        ファイルをアップロード
+        {label}
       </Button>
     </>
   )
